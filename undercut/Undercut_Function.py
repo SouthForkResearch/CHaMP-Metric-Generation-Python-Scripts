@@ -6,7 +6,10 @@ def Undercut_Function(inputdata, Lgth_Wet, Area_Wet):
     print('calculating undercut metrics')
 
     Ucut_Lgth = numpy.nansum(inputdata.EstimatedLength)
-    Ucut_Area = numpy.nansum(inputdata.AverageWidth * inputdata.EstimatedLength)
+    # AverageWidth isn't available via api call, so calculate it from Width25, Width50, Width75
+    AverageWidth= 1.0/3.0 * (inputdata.Width25+inputdata.Width50+inputdata.Width75)
+    #Ucut_Area = numpy.nansum(inputdata.AverageWidth * inputdata.EstimatedLength)
+    Ucut_Area = numpy.nansum(AverageWidth * inputdata.EstimatedLength)
 
     # Ucut_Lgth_Pct is divided by two, I assume to acct for stream left and stream right
     UcutLgth_Pct = Ucut_Lgth / Lgth_Wet * 100 / 2

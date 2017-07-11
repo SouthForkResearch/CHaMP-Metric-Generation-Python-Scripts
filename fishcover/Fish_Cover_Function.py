@@ -62,10 +62,10 @@ def Fish_Cover_Function(inputdata, cusummary, cudata):
     # Figure out fraction area in each channel unit
     #Area_Pct_by_CU = inputdata.AreaTotal / numpy.nansum(inputdata.AreaTotal)
     Area_Pct_by_CU = inputdata.AreaTotal / numpy.nansum(inputdata.AreaTotal)
-    Area_Pct_by_CU_FNT = inputdata.AreaTotal[(inputdata.Tier1 == "Fast-NonTurbulent/Glide")] / numpy.nansum(inputdata.AreaTotal)
-    Area_Pct_by_CU_FT = inputdata.AreaTotal[(inputdata.Tier1 == "Fast-Turbulent")] / numpy.nansum(inputdata.AreaTotal)
-    Area_Pct_by_CU_SlowPool = inputdata.AreaTotal[(inputdata.Tier1 == "Slow/Pool")] / numpy.nansum(inputdata.AreaTotal)
-    Area_Pct_by_CU_SSC = inputdata.AreaTotal[(inputdata.Tier1 == "Small Side Channel")] / numpy.nansum(inputdata.AreaTotal)
+    Area_Pct_by_CU_FNT = inputdata.AreaTotal[(inputdata.Tier1 == "Fast-NonTurbulent/Glide")] / numpy.nansum(inputdata.AreaTotal[(inputdata.Tier1 == "Fast-NonTurbulent/Glide")])
+    Area_Pct_by_CU_FT = inputdata.AreaTotal[(inputdata.Tier1 == "Fast-Turbulent")] / numpy.nansum(inputdata.AreaTotal[(inputdata.Tier1 == "Fast-Turbulent")])
+    Area_Pct_by_CU_SlowPool = inputdata.AreaTotal[(inputdata.Tier1 == "Slow/Pool")] / numpy.nansum(inputdata.AreaTotal[(inputdata.Tier1 == "Slow/Pool")])
+    Area_Pct_by_CU_SSC = inputdata.AreaTotal[(inputdata.Tier1 == "Small Side Channel")] / numpy.nansum(inputdata.AreaTotal[(inputdata.Tier1 == "Small Side Channel")])
 
 
 
@@ -123,7 +123,6 @@ def Fish_Cover_Function(inputdata, cusummary, cudata):
 
     FishCovUcut_by_CU_SSC = Area_Pct_by_CU_SSC * inputdata.UndercutBanksFC[(inputdata.Tier1 == "Small Side Channel")]
     FishCovUcut_SSC = numpy.nansum(FishCovUcut_by_CU_SSC)
-
 
 
     ###########################################################################################
@@ -195,7 +194,7 @@ def Fish_Cover_Function(inputdata, cusummary, cudata):
     FishCovTotal_SlowPool = numpy.nansum([FishCovLW_SlowPool, FishCovTVeg_SlowPool, FishCovUcut_SlowPool, FishCovArt_SlowPool, FishCovAqVeg_SlowPool])
     FishCovTotal_SSC = numpy.nansum([FishCovLW_SSC, FishCovTVeg_SSC, FishCovUcut_SSC, FishCovArt_SSC, FishCovAqVeg_SSC])
 
-
+    print(FishCovTotal_SlowPool)
 
 
 
@@ -226,7 +225,9 @@ if __name__ == "__main__":
 
     print(os.listdir(os.getcwd()))
 
-    VisitID = 2608
+    VisitID = 2015
+   # VisitID = 1770
+    #VisitID = 5
     print(VisitID)
     inputdata=pd.read_csv('FishCover.csv')
     cusummary=pd.read_csv('ChannelUnitSummary.csv')

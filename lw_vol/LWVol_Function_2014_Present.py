@@ -66,10 +66,18 @@ def LWVol_Function_2014_Present(inputdata, cudata):
     LWVol_WetSlow = volume(Temp_Wet.Diameter, Temp_Wet.Length)
     LWVol_BfSlow =  LWVol_DrySlow+ LWVol_WetSlow
 
+
+    # Small side channels
+    Temp_Dry = LWD_Dry[(LWD_Dry.Tier1 == "Small Side Channel")]
+    Temp_Wet = LWD_Wet[(LWD_Wet.Tier1 == "Small Side Channel")]
+    LWVol_Dry_SSC = volume(Temp_Dry.Diameter, Temp_Dry.Length)
+    LWVol_Wet_SSC = volume(Temp_Wet.Diameter, Temp_Wet.Length)
+    LWVol_Bf_SSC =  LWVol_Dry_SSC + LWVol_Wet_SSC
+
     #print(cudata)
 
-    returnlist = pd.Series([LWVol_Wet,LWVol_Bf, LWVol_WetFstNT,LWVol_BfFstNT, LWVol_WetFstTurb,LWVol_BfFstTurb,LWVol_WetSlow,LWVol_BfSlow],
-                           index = ['LWVol_Wet','LWVol_Bf','WetFstNT','LWVol_BfFstNT','LWVol_WetFstTurb','LWVol_BfFstTurb','LWVol_WetSlow','LWVol_BfSlow'])
+    returnlist = pd.Series([LWVol_Wet,LWVol_Bf, LWVol_WetFstNT,LWVol_BfFstNT, LWVol_WetFstTurb,LWVol_BfFstTurb,LWVol_WetSlow,LWVol_BfSlow, LWVol_Wet_SSC, LWVol_Bf_SSC],
+                           index = ['LWVol_Wet','LWVol_Bf','WetFstNT','LWVol_BfFstNT','LWVol_WetFstTurb','LWVol_BfFstTurb','LWVol_WetSlow','LWVol_BfSlow','LWVol_Wet_SSC', 'LWVol_Bf_SSC'])
     return(returnlist)
 
     #print('All Done!')
@@ -82,7 +90,7 @@ def LWVol_Function_2014_Present(inputdata, cudata):
 if __name__ == "__main__":
 
     #VisitID = 1
-    VisitID = 2608
+    VisitID = 2007
     #VisitID = 2505
 
     inputdata = pd.read_csv('LargeWoodPiece.csv')

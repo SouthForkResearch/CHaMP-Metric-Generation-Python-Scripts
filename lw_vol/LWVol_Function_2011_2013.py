@@ -83,8 +83,17 @@ def LWVol_Function_2011_2013(inputdata, cudata):
     LWVol_WetSlow = volume(Temp_Wet)
     LWVol_BfSlow = LWVol_DrySlow + LWVol_WetSlow
 
-    returnlist = pd.Series([LWVol_Wet,LWVol_Bf, LWVol_WetFstNT,LWVol_BfFstNT, LWVol_WetFstTurb,LWVol_BfFstTurb,LWVol_WetSlow,LWVol_BfSlow],
-                           index = ['LWVol_Wet','LWVol_Bf','LWVol_WetFstNT','LWVol_BfFstNT','LWVol_WetFstTurb','LWVol_BfFstTurb','LWVol_WetSlow','LWVol_BfSlow'])
+    # Small Side Channel
+    Temp_Dry = LWD_Dry[(LWD_Dry.Tier1 == "Small Side Channel")]
+    Temp_Wet = LWD_Wet[(LWD_Wet.Tier1 == "Small Side Channel")]
+    LWVol_Dry_SSC = volume(Temp_Dry)
+    LWVol_Wet_SSC = volume(Temp_Wet)
+    LWVol_Bf_SSC = LWVol_Dry_SSC + LWVol_Wet_SSC
+
+
+    returnlist = pd.Series([LWVol_Wet,LWVol_Bf, LWVol_WetFstNT,LWVol_BfFstNT, LWVol_WetFstTurb,LWVol_BfFstTurb,LWVol_WetSlow,LWVol_BfSlow,LWVol_Wet_SSC,LWVol_Bf_SSC],
+                           index = ['LWVol_Wet','LWVol_Bf','LWVol_WetFstNT','LWVol_BfFstNT','LWVol_WetFstTurb','LWVol_BfFstTurb','LWVol_WetSlow','LWVol_BfSlow','LWVol_Wet_SSC','LWVol_Bf_SSC'])
+
     return(returnlist)
 
 
