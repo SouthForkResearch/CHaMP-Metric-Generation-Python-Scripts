@@ -62,6 +62,7 @@ if __name__ == "__main__":
     #VisitID = 1
     #VisitID = 2608
     VisitID = 2505
+
     inputdata=pd.read_csv('RiparianStructure.csv')
 
     inputdata = inputdata[(inputdata.VisitID == VisitID)]

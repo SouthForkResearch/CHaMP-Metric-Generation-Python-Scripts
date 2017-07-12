@@ -228,6 +228,7 @@ if __name__ == "__main__":
     VisitID = 2015
    # VisitID = 1770
     #VisitID = 5
+
     print(VisitID)
     inputdata=pd.read_csv('FishCover.csv')
     cusummary=pd.read_csv('ChannelUnitSummary.csv')
