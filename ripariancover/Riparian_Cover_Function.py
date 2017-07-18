@@ -59,9 +59,10 @@ def Riparian_Cover_Function(inputdata):
 # __name__ is a specifal variable that gets set when you run this file directly
 if __name__ == "__main__":
 
+    # Enter a visit ID to test the algorithm
     #VisitID = 1
-    #VisitID = 2608
-    VisitID = 2505
+    VisitID = 2608
+    #VisitID = 2505
 
     inputdata=pd.read_csv('RiparianStructure.csv')
 
