@@ -179,19 +179,49 @@ def Substrate_Function(inputdata, cusummary, cudata):
 
 # __name__ is a specifal variable that gets set when you run this file directly
 if __name__ == "__main__":
+    res = pd.DataFrame(columns=('VisitID','valid', 'SubEstBldr', 'SubEstCbl', 'SubEstGrvl', 'SubEstSandFines',
+                                                'SubEstBldr_FNT', 'SubEstCbl_FNT', 'SubEstGrvl_FNT', 'SubEstSandFines_FNT',
+                                                    'SubEstBldr_FT', 'SubEstCbl_FT', 'SubEstGrvl_FT', 'SubEstSandFines_FT',
+                                                        'SubEstBldr_SlowPool', 'SubEstCbl_SlowPool', 'SubEstGrvl_SlowPool','SubEstSandFines_SlowPool',
+                                                            'SubEstBldr_SSC', 'SubEstCbl_SSC', 'SubEstGrvl_SSC', 'SubEstSandFines_SSC'))
+
 
     VisitID = 2505
     VisitID = 2608
     VisitID = 4
     print(VisitID)
-    inputdata=pd.read_csv('SubstrateCover.csv')
-    cusummary=pd.read_csv('ChannelUnitSummary.csv')
-    cudata = pd.read_csv('ChannelUnit.csv')
-    #data = data[(D_data.SubstrateSizeClass != "1448 - 2048mm")]
-    inputdata = inputdata[(inputdata.VisitID == VisitID)]
-    cusummary = cusummary[(cusummary.VisitID == VisitID)]
-    cudata = cudata[(cudata.VisitID == VisitID)]
+    inputdata_all=pd.read_csv('SubstrateCover.csv')
+    cusummary_all=pd.read_csv('ChannelUnitSummary.csv')
+    cudata_all = pd.read_csv('ChannelUnit.csv')
 
+    VisitIDs = inputdata_all.VisitID
+    VisitIDs = numpy.unique(VisitIDs)
+    #VisitIDs = VisitIDs[0:100]
+    #VisitIDs = [2020]
 
-    results = Substrate_Function(inputdata, cusummary, cudata)
-    print(results)
+    counter = 0
+    for VisitID in VisitIDs:
+        print(VisitID)
+
+        #data = data[(D_data.SubstrateSizeClass != "1448 - 2048mm")]
+        inputdata = inputdata_all[(inputdata_all.VisitID == VisitID)]
+        cusummary = cusummary_all[(cusummary_all.VisitID == VisitID)]
+        cudata = cudata_all[(cudata_all.VisitID == VisitID)]
+
+        if ((len(cudata) > 0 and len(cusummary) > 0) and len(inputdata) > 0):
+
+            results = Substrate_Function(inputdata, cusummary, cudata)
+            #print(results)
+
+            res.set_value(counter, 'VisitID', VisitID)
+            res.set_value(counter, ['valid', 'SubEstBldr', 'SubEstCbl', 'SubEstGrvl', 'SubEstSandFines',
+                                                    'SubEstBldr_FNT', 'SubEstCbl_FNT', 'SubEstGrvl_FNT', 'SubEstSandFines_FNT',
+                                                        'SubEstBldr_FT', 'SubEstCbl_FT', 'SubEstGrvl_FT', 'SubEstSandFines_FT',
+                                                            'SubEstBldr_SlowPool', 'SubEstCbl_SlowPool', 'SubEstGrvl_SlowPool','SubEstSandFines_SlowPool',
+                                                                'SubEstBldr_SSC', 'SubEstCbl_SSC', 'SubEstGrvl_SSC', 'SubEstSandFines_SSC'],results)
+            counter=counter+1
+
+    print "Done"
+
+    print(res)
+    res.to_csv('Substrate_Val.csv')

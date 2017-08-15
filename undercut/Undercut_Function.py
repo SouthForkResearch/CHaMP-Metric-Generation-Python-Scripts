@@ -29,20 +29,41 @@ def Undercut_Function(inputdata, Lgth_Wet, Area_Wet):
 
 # __name__ is a specifal variable that gets set when you run this file directly
 if __name__ == "__main__":
+
+    res = pd.DataFrame(columns=('VisitID','Ucut_Lgth', 'UcutLgth_Pct','Ucut_Area', 'UcutArea_Pct'))
+
     #VisitID = 1
     #xzVisitID = 2608
     VisitID = 2505
     print(VisitID)
-    inputdata=pd.read_csv('UndercutBank.csv')
-    MVI = pd.read_csv('MetricVisitInformation.csv')
-    #data = data[(D_data.SubstrateSizeClass != "1448 - 2048mm")]
-    inputdata = inputdata[(inputdata.VisitID == VisitID)]
-    inputdata = inputdata.reset_index(drop=True)
-    MVI = MVI[(MVI.VisitID == VisitID)]
+    inputdata_all=pd.read_csv('UndercutBank.csv')
+    MVI_all = pd.read_csv('MetricVisitInformation.csv')
 
-    print(float(MVI.Lgth_Wet))
-    print(float(MVI.Area_Wet))
+    VisitIDs = inputdata_all.VisitID
+    VisitIDs = numpy.unique(VisitIDs)
+    # VisitIDs = VisitIDs[0:100]
+    # VisitIDs = [2020]
+
+    counter = 0
+    for VisitID in VisitIDs:
+        print(VisitID)
+
+        #data = data[(D_data.SubstrateSizeClass != "1448 - 2048mm")]
+        inputdata = inputdata_all[(inputdata_all.VisitID == VisitID)]
+        inputdata = inputdata.reset_index(drop=True)
+        MVI = MVI_all[(MVI_all.VisitID == VisitID)]
+
+        #print(float(MVI.Lgth_Wet))
+        #print(float(MVI.Area_Wet))
+
+        results = Undercut_Function(inputdata, float(MVI.Lgth_Wet), float(MVI.Area_Wet))
+
+        res.set_value(counter, 'VisitID', VisitID)
+        res.set_value(counter, ['Ucut_Lgth', 'UcutLgth_Pct','Ucut_Area', 'UcutArea_Pct'], results)
+        counter = counter + 1
+        #print(results)
 
 
-    results = Undercut_Function(inputdata, float(MVI.Lgth_Wet), float(MVI.Area_Wet))
-    print(results)
+        #print(res)
+
+    res.to_csv('Undercut_Val.csv')
