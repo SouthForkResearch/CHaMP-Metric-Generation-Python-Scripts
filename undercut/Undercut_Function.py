@@ -10,10 +10,11 @@ def Undercut_Function(inputdata, Lgth_Wet, Area_Wet):
     AverageWidth= 1.0/3.0 * (inputdata.Width25+inputdata.Width50+inputdata.Width75)
     #Ucut_Area = numpy.nansum(inputdata.AverageWidth * inputdata.EstimatedLength)
     Ucut_Area = numpy.nansum(AverageWidth * inputdata.EstimatedLength)
+    #Ucut_Area = numpy.nansum(inputdata.EstimatedUndercutArea)
 
-    # Ucut_Lgth_Pct is divided by two, I assume to acct for stream left and stream right
+    #Ucut_Lgth_Pct is divided by two, I assume to acct for stream left and stream right
     UcutLgth_Pct = Ucut_Lgth / Lgth_Wet * 100 / 2
-    UcutArea_Pct = Ucut_Area / Area_Wet * 100
+    UcutArea_Pct = Ucut_Area / (Area_Wet+Ucut_Area) * 100
 
     if len(inputdata) == 0:
         Ucut_Lgth = numpy.nan
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     VisitIDs = inputdata_all.VisitID
     VisitIDs = numpy.unique(VisitIDs)
     # VisitIDs = VisitIDs[0:100]
-    # VisitIDs = [2020]
+    #VisitIDs = [951]
 
     counter = 0
     for VisitID in VisitIDs:
@@ -64,6 +65,6 @@ if __name__ == "__main__":
         #print(results)
 
 
-        #print(res)
+        print(res)
 
     res.to_csv('Undercut_Val.csv')

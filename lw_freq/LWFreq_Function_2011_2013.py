@@ -2,16 +2,42 @@
 import numpy
 import pandas as pd
 
-def LWFreq_Function_2011_2013(inputdata, Lgth_Wet):
+def LWFreq_Function_2011_2013(inputdata, wdj, Lgth_Wet):
     print('calculating LWF')
 
     # Split into wet and dry components
-    LWD_Dry = inputdata[(inputdata.LargeWoodType == "Dry")]
-    LWD_Wet = inputdata[(inputdata.LargeWoodType == "Wet")]
+    for i in range(len(inputdata.LargeWoodType)):
+        if inputdata.LargeWoodType[i] == "Wet In Non-Qualifying Side Channel":
+            inputdata.LargeWoodType[i] = "Wet"
+        if inputdata.LargeWoodType[i] == "Dry In Non-Qualifying Side Channel":
+            inputdata.LargeWoodType[i] = "Dry"
 
+
+    LWD_Dry = inputdata[(inputdata.LargeWoodType == "Dry")]
+    wdj_Dry = wdj[(wdj.LargeWoodType == "Dry")]
+    a=(inputdata.LargeWoodType == "Wet")
+    b= pd.isnull(inputdata.LargeWoodType)
+    c=a
+    for i in range(len(c)):
+        #print(i)
+        c[i] = a[i] or b[i]
+    LWD_Wet = inputdata[(c)]
+
+    a=(wdj.LargeWoodType == "Wet")
+    b= pd.isnull(wdj.LargeWoodType)
+    c=a
+    for i in range(len(c)):
+        print(i)
+        c[i] = a[i] or b[i]
+    wdj_Wet = wdj[(c)]
+
+
+    #print(c)
     # Pull total number of LW pieces from the total column.
-    LWD_Dry_sum = sum(LWD_Dry.SumLWDCount)
-    LWD_Wet_sum = sum(LWD_Wet.SumLWDCount)
+    LWD_Dry_sum = sum(LWD_Dry.SumLWDCount)+sum(wdj_Dry.SumJamCount)
+    LWD_Wet_sum = sum(LWD_Wet.SumLWDCount)+sum(wdj_Wet.SumJamCount)
+    print(LWD_Wet_sum)
+    print(LWD_Dry_sum)
 
     # Documentation says to round off, actual results are not rounded off.
     LWFreq_Wet = 100 * LWD_Wet_sum / Lgth_Wet
@@ -36,22 +62,27 @@ if __name__ == "__main__":
     counter = 0
 
     inputdata_all = pd.read_csv('LargeWoodyDebris.csv')
+    # adding pull for table "woody debris jam'), specific to 2012 issues
+    wdj_all = pd.read_csv('WoodyDebrisJam.csv')
     MVI_all = pd.read_csv('MetricVisitInformation.csv')
 
     VisitIDs = inputdata_all.VisitID
     VisitIDs = numpy.unique(VisitIDs)
     #VisitIDs = VisitIDs[0:100]
 
-    #VisitIDs = [4]
+    #VisitIDs = [1201]
     for VisitID in VisitIDs:
         print(VisitID)
 
       # data = data[(D_data.SubstrateSizeClass != "1448 - 2048mm")]
         inputdata = inputdata_all[(inputdata_all.VisitID == VisitID)]
         inputdata = inputdata.reset_index(drop=True)
+        wdj = wdj_all[(wdj_all.VisitID == VisitID)]
+        wdj = wdj.reset_index(drop=True)
+
         MVI = MVI_all[(MVI_all.VisitID == VisitID)]
 
-        results = LWFreq_Function_2011_2013(inputdata, float(MVI.Lgth_Wet))
+        results = LWFreq_Function_2011_2013(inputdata, wdj, float(MVI.Lgth_Wet))
         print(results)
 
         res.set_value(counter, 'VisitID', VisitID)
